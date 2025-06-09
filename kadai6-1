@@ -1,0 +1,40 @@
+import requests
+
+APP_ID = 2501cb7d37ed5039f3e14168b9ca30d450a78ef5
+
+API_URL = "https://api.e-stat.go.jp/rest/3.0/app/json/getStatsData"
+
+params = {
+    "appId": APP_ID,
+    "statsDataId": "0003222340",  # 家計調査
+    "cdArea": "13101",            # 東京都区部
+    "cdCat01": "030100000",       # 家計支出総額（例）
+    "metaGetFlg": "Y",
+    "cntGetFlg": "N",
+    "explanationGetFlg": "Y",
+    "annotationGetFlg": "Y",
+    "sectionHeaderFlg": "1",
+    "replaceSpChars": "0",
+    "lang": "J"
+}
+
+# 📡 APIへリクエスト送信
+response = requests.get(API_URL, params=params)
+
+# 🧾 JSONデータとして取得
+data = response.json()
+
+# 📤 データ出力（簡易表示）
+print("==== 家計調査の支出データ（東京都区部） ====")
+
+# 観測値を表示
+for d in data['GET_STATS_DATA']['STATISTICAL_DATA']['DATA_INF']['VALUE']:
+    time = d['@time']        # 時点
+    value = d['$']           # 実際の値
+    print(f"{time} : {value}")
+
+#response = requests.get(API_URL, params=params)
+response = requests.get(API_URL, params=params)
+# Process the response
+data = response.json()
+print(data)
